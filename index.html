@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ahmed Habib - Systemutvecklare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#6366f1",
+              secondary: "#4338ca",
+              dark: "#111827",
+              darkSecondary: "#1f2937",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      .gradient-bg {
+      background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+      }
+      .glass-effect {
+      backdrop-filter: blur(10px);
+      background: rgba(17, 24, 39, 0.8);
+      }
+      .hover-scale {
+      transition: transform 0.3s ease;
+      }
+      .hover-scale:hover {
+      transform: scale(1.05);
+      }
+      .skill-card {
+      transition: all 0.3s ease;
+      }
+      .skill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+      .project-card {
+      transition: all 0.3s ease;
+      }
+      .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body class="bg-dark text-gray-200">
+    <nav class="fixed w-full z-50 glass-effect">
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <a
+            href="#"
+            class="text-3xl font-bold tracking-wider text-primary"
+            style="font-family: 'Montserrat', sans-serif;"
+            >Ahmed Habib</a
+          >
+          <div class="hidden md:flex space-x-8">
+            <a
+              href="#hem"
+              class="text-gray-200 hover:text-primary transition-colors"
+              >Hem</a
+            >
+            <a
+              href="#om-mig"
+              class="text-gray-200 hover:text-primary transition-colors"
+              >Om mig</a
+            >
+            <a
+              href="#fardigheter"
+              class="text-gray-200 hover:text-primary transition-colors"
+              >Färdigheter</a
+            >
+            <a
+              href="#projekt"
+              class="text-gray-200 hover:text-primary transition-colors"
+              >Projekt</a
+            >
+            <a
+              href="#kontakt"
+              class="text-gray-200 hover:text-primary transition-colors"
+              >Kontakt</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+    <section
+      id="hem"
+      class="min-h-screen flex items-center relative overflow-hidden"
+      style="background-image: url('https://public.readdy.ai/ai/img_res/b3f460f4e95ab33cdb9a0c23defe06bc.jpg')"
+    >
+      <div class="container mx-auto px-6">
+        <div class="max-w-3xl">
+          <h1 class="text-6xl font-bold mb-6 text-gray-900">
+            Hej! Jag är Ahmed Habib
+          </h1>
+          <p class="text-xl mb-8 text-gray-700">
+            En passionerad systemutvecklare med fokus på att skapa innovativa
+            och användarvänliga lösningar.
+          </p>
+          <a
+            href="#kontakt"
+            class="bg-primary text-white px-8 py-3 rounded-button hover:bg-secondary transition-colors"
+            >Kontakta mig</a
+          >
+        </div>
+      </div>
+    </section>
+    <section id="om-mig" class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">
+          Om mig
+        </h2>
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div class="relative">
+            <div
+              class="absolute inset-0 bg-primary/10 rounded-lg transform -rotate-3"
+            ></div>
+            <img
+              src="https://static.readdy.ai/image/fe1c75caecb860cf16a12336482def3b/062687dc1422dcc11ac975f614d9b364.jpeg"
+              alt="Professional Portrait"
+              class="rounded-lg shadow-xl w-full object-cover relative z-10"
+            />
+          </div>
+          <div>
+            <h3 class="text-3xl font-bold mb-6 text-gray-900">
+              Senior Systemutvecklare
+            </h3>
+            <p class="text-gray-700 mb-6 text-lg leading-relaxed">
+              Med över 5 års erfarenhet inom systemutveckling och en gedigen
+              utbildning från Lunds Universitet, specialiserar jag mig på att
+              bygga robusta och skalbara system. Min bakgrund inom ekonomi och
+              juridik från Malmö Borgarskola ger mig ett unikt perspektiv på
+              affärskritiska lösningar.
+            </p>
+            <div class="space-y-6">
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg border-l-4 border-primary"
+              >
+                <h4 class="font-bold text-xl text-gray-900">
+                  Teknisk Expertis
+                </h4>
+                <p class="text-gray-700 mt-2">
+                  • Fullstack-utveckling med modern tech stack
+                </p>
+                <p class="text-gray-700">• Systemarkitektur & mikroservices</p>
+                <p class="text-gray-700">• DevOps & molnlösningar</p>
+              </div>
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg border-l-4 border-primary"
+              >
+                <h4 class="font-bold text-xl text-gray-900">Specialisering</h4>
+                <p class="text-gray-700 mt-2">• Enterprise-system utveckling</p>
+                <p class="text-gray-700">• Säkerhet & prestanda-optimering</p>
+                <p class="text-gray-700">• API-design & integration</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="fardigheter" class="py-20 bg-gray-900">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">
+          Färdigheter
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div
+            class="p-6 bg-darkSecondary rounded-lg shadow-lg text-center skill-card"
+          >
+            <i class="ri-html5-line text-4xl text-primary mb-4"></i>
+            <h3 class="font-bold">HTML5</h3>
+          </div>
+          <div
+            class="p-6 bg-darkSecondary rounded-lg shadow-lg text-center skill-card"
+          >
+            <i class="ri-css3-line text-4xl text-primary mb-4"></i>
+            <h3 class="font-bold">CSS3</h3>
+          </div>
+          <div
+            class="p-6 bg-darkSecondary rounded-lg shadow-lg text-center skill-card"
+          >
+            <i class="ri-javascript-line text-4xl text-primary mb-4"></i>
+            <h3 class="font-bold">JavaScript</h3>
+          </div>
+          <div
+            class="p-6 bg-darkSecondary rounded-lg shadow-lg text-center skill-card"
+          >
+            <i class="ri-reactjs-line text-4xl text-primary mb-4"></i>
+            <h3 class="font-bold">React</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="projekt" class="py-20">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">
+          Mina Projekt
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div
+            class="bg-darkSecondary rounded-lg shadow-lg overflow-hidden project-card"
+          >
+            <img
+              src="https://public.readdy.ai/ai/img_res/705d15528a8d146d0e46fbc881f8dcaa.jpg"
+              alt="Projekt 1"
+              class="w-full h-48 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">E-handelslösning</h3>
+              <p class="text-gray-700">
+                En modern e-handelsplattform byggd med React och Node.js
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-darkSecondary rounded-lg shadow-lg overflow-hidden project-card"
+          >
+            <img
+              src="https://public.readdy.ai/ai/img_res/177f38ac2b2fa646fd707cad342e6d15.jpg"
+              alt="Projekt 2"
+              class="w-full h-48 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">Mobilapplikation</h3>
+              <p class="text-gray-700">
+                En träningsapp utvecklad med React Native
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-darkSecondary rounded-lg shadow-lg overflow-hidden project-card"
+          >
+            <img
+              src="https://public.readdy.ai/ai/img_res/7844bffd7127d6bcc6c31ffee1fcc840.jpg"
+              alt="Projekt 3"
+              class="w-full h-48 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="font-bold text-xl mb-2">Analysverktyg</h3>
+              <p class="text-gray-700">Ett dashboard för datavisualisering</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="kontakt" class="py-20 bg-gray-900">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-12 text-center text-gray-900">
+          Kontakta Mig
+        </h2>
+        <div class="max-w-2xl mx-auto">
+          <form class="space-y-6">
+            <div>
+              <label class="block text-gray-700 mb-2">Namn</label>
+              <input
+                type="text"
+                class="w-full p-3 rounded-lg border border-gray-600 bg-darkSecondary text-gray-200 focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+            </div>
+            <div>
+              <label class="block text-gray-700 mb-2">E-post</label>
+              <input
+                type="email"
+                class="w-full p-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+            </div>
+            <div>
+              <label class="block text-gray-700 mb-2">Meddelande</label>
+              <textarea
+                class="w-full p-3 rounded-lg border border-gray-600 bg-darkSecondary text-gray-200 focus:border-primary focus:ring-1 focus:ring-primary"
+                rows="4"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              class="w-full bg-primary text-white py-3 rounded-button hover:bg-secondary transition-colors"
+            >
+              Skicka Meddelande
+            </button>
+          </form>
+          <div class="flex justify-center space-x-6 mt-8">
+            <a href="#" class="text-gray-600 hover:text-primary"
+              ><i class="ri-linkedin-fill text-2xl"></i
+            ></a>
+            <a href="#" class="text-gray-600 hover:text-primary"
+              ><i class="ri-instagram-fill text-2xl"></i
+            ></a>
+            <a href="#" class="text-gray-600 hover:text-primary"
+              ><i class="ri-facebook-fill text-2xl"></i
+            ></a>
+            <a
+              href="mailto:ahmadj.Habib@gmail.com"
+              class="text-gray-600 hover:text-primary"
+              ><i class="ri-mail-fill text-2xl"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="gradient-bg py-8">
+      <div class="container mx-auto px-6 text-center text-white">
+        <p>&copy; 2025 Ahmed Habib. Alla rättigheter förbehållna.</p>
+      </div>
+    </footer>
+    <script>
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+          });
+        });
+      });
+      document.querySelectorAll(".skill-card").forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          card.querySelector("i").style.transform = "scale(1.2) rotate(360deg)";
+          card.querySelector("i").style.transition = "all 0.5s ease";
+        });
+        card.addEventListener("mouseleave", () => {
+          card.querySelector("i").style.transform = "scale(1) rotate(0deg)";
+        });
+      });
+      document.querySelectorAll(".project-card").forEach((card) => {
+        const img = card.querySelector("img");
+        card.addEventListener("mouseenter", () => {
+          img.style.transform = "scale(1.1)";
+          img.style.transition = "all 0.5s ease";
+        });
+        card.addEventListener("mouseleave", () => {
+          img.style.transform = "scale(1)";
+        });
+      });
+    </script>
+  </body>
+</html>
