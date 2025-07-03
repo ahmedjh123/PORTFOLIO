@@ -699,7 +699,7 @@
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-400 mb-1">Telefon</p>
-                                        <p class="font-medium">+46 70 409 5707</p>
+                                        <p class="font-medium">+46 70 123 45 67</p>
                                     </div>
                                 </div>
                                 
@@ -765,6 +765,31 @@
             </div>
         </div>
     </footer>
+
+    <!-- ADMIN Button (bottom right) -->
+    <button id="admin-btn" class="fixed z-50 bottom-6 right-6 bg-dark-bg-3/80 text-xs text-gray-400 px-4 py-2 rounded-full shadow-lg glass-effect hover:bg-primary/80 hover:text-white transition-all" style="opacity:0.7;">
+        ADMIN
+    </button>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden">
+        <div class="bg-dark-bg-2 glass-card rounded-xl p-8 w-full max-w-sm relative animate-fadeIn" style="animation-delay:0s;">
+            <button id="close-admin-modal" class="absolute top-3 right-3 text-gray-400 hover:text-primary text-xl">&times;</button>
+            <h2 class="text-2xl font-bold mb-6 text-center">Admin Login</h2>
+            <form id="admin-login-form" autocomplete="off">
+                <div class="mb-4">
+                    <label class="block text-sm mb-1 text-gray-300" for="admin-email">E-post</label>
+                    <input id="admin-email" type="email" class="form-input w-full px-4 py-2 rounded-lg border-none" placeholder="E-post" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm mb-1 text-gray-300" for="admin-password">Lösenord</label>
+                    <input id="admin-password" type="password" class="form-input w-full px-4 py-2 rounded-lg border-none" placeholder="Lösenord" required>
+                </div>
+                <div id="admin-login-error" class="text-red-400 text-sm mb-4 hidden"></div>
+                <button type="submit" class="w-full py-2 bg-primary hover:bg-secondary text-white font-medium rounded-button transition-all">Logga in</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script id="navigation-script">
@@ -920,8 +945,20 @@
                     }
                     
                     if (isValid) {
-                        // Here you would normally send the form data to a server
-                        // For demo purposes, we'll just show a success message
+                        // Spara meddelandet i localStorage
+                        let messages = [];
+                        try {
+                            messages = JSON.parse(localStorage.getItem('portfolio_messages')) || [];
+                        } catch {}
+                        messages.push({
+                            name,
+                            email,
+                            subject,
+                            message,
+                            date: new Date().toISOString().slice(0, 10)
+                        });
+                        localStorage.setItem('portfolio_messages', JSON.stringify(messages));
+
                         contactForm.innerHTML = `
                             <div class="text-center py-8">
                                 <div class="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center mb-4">
@@ -953,6 +990,55 @@
                 });
             }
         });
+    </script>
+
+    <script>
+    // ADMIN button/modal logic
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elements
+        const adminBtn = document.getElementById('admin-btn');
+        const adminModal = document.getElementById('admin-modal');
+        const closeAdminModal = document.getElementById('close-admin-modal');
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const adminLoginError = document.getElementById('admin-login-error');
+
+        // Show modal
+        adminBtn.addEventListener('click', () => {
+            adminModal.classList.remove('hidden');
+        });
+        // Hide modal
+        closeAdminModal.addEventListener('click', () => {
+            adminModal.classList.add('hidden');
+            adminLoginError.classList.add('hidden');
+            adminLoginError.textContent = '';
+            adminLoginForm.reset();
+        });
+        // Hide modal on outside click
+        adminModal.addEventListener('click', (e) => {
+            if (e.target === adminModal) {
+                adminModal.classList.add('hidden');
+                adminLoginError.classList.add('hidden');
+                adminLoginError.textContent = '';
+                adminLoginForm.reset();
+            }
+        });
+
+        // Handle login
+        adminLoginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value.trim();
+            const password = document.getElementById('admin-password').value;
+            if (email === 'Ahmadj.habib@gmail.com' && password === 'Ahmad123') {
+                // Save session (localStorage)
+                localStorage.setItem('admin_logged_in', 'true');
+                localStorage.setItem('admin_email', email);
+                window.location.href = 'dashboard.html';
+            } else {
+                adminLoginError.textContent = 'Fel e-post eller lösenord.';
+                adminLoginError.classList.remove('hidden');
+            }
+        });
+    });
     </script>
 </body>
 </html>
