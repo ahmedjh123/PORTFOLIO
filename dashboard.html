@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Ahmed Habib</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#6366f1',secondary:'#4338ca'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1f2937 100%);
+            color: #f3f4f6;
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .glass-effect {
+            background: rgba(31, 41, 55, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(31, 41, 55, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        .sidebar {
+            background: #10182a;
+            min-height: 100vh;
+            width: 220px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 40;
+            border-right: 1px solid #222a3a;
+        }
+        .sidebar .active {
+            background: #232e4a;
+            color: #fff;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            color: #8ca0d7;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .sidebar-link:hover {
+            background: #232e4a;
+            color: #fff;
+        }
+        .stat-box {
+            background: #181f32;
+            border-radius: 16px;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 160px;
+            min-height: 90px;
+            box-shadow: 0 2px 8px 0 #232e4a33;
+        }
+        .stat-label {
+            color: #8ca0d7;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .circle-chart {
+            width: 90px;
+            height: 90px;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+        .circle-bg {
+            stroke: #222a3a;
+        }
+        .circle {
+            stroke: #6366f1;
+            transition: stroke-dasharray 1s;
+        }
+        .bar-chart {
+            width: 100%;
+            height: 100px;
+            display: block;
+        }
+        .bar {
+            transition: height 0.8s;
+        }
+        .line-chart {
+            width: 100%;
+            height: 100px;
+            display: block;
+        }
+        .logout-btn {
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: #4338ca;
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0 !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar flex flex-col py-8 px-2">
+        <div class="text-2xl font-bold text-primary mb-10 px-4">Analytics</div>
+        <a href="#" class="sidebar-link active" id="nav-overview"><i class="ri-dashboard-line"></i>Översikt</a>
+        <a href="#" class="sidebar-link" id="nav-statistics"><i class="ri-bar-chart-2-line"></i>Statistik</a>
+        <a href="#" class="sidebar-link" id="nav-messages"><i class="ri-mail-line"></i>Meddelanden</a>
+        <a href="#" class="sidebar-link" id="nav-profile"><i class="ri-user-line"></i>Profil</a>
+        <a href="#" class="sidebar-link" id="nav-settings"><i class="ri-settings-3-line"></i>Inställningar</a>
+        <div class="flex-1"></div>
+        <button id="logout-btn" class="sidebar-link bg-primary text-white mt-4 logout-btn"><i class="ri-logout-box-r-line"></i>Logga ut</button>
+    </div>
+    <div class="main-content" style="margin-left:220px;">
+        <nav class="w-full glass-effect px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold font-['Montserrat'] text-white">
+                <span class="text-primary">Ahmed</span> Admin
+            </div>
+        </nav>
+        <main class="px-6 py-8">
+            <h1 class="text-3xl md:text-4xl font-bold mb-8 animate-fadeIn" id="welcome-text">Välkommen, Admin</h1>
+            <!-- Statistikrutor -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="stat-box">
+                    <div class="stat-label">Projekt</div>
+                    <div class="stat-value" id="stat-projects">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Kontaktmeddelanden</div>
+                    <div class="stat-value" id="stat-messages">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Besökstid</div>
+                    <div class="stat-value" id="stat-visits">0 min</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Aktiva användare</div>
+                    <div class="stat-value" id="stat-users">0</div>
+                </div>
+            </div>
+            <!-- Diagramrader -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8" id="dashboard-charts">
+                <!-- Cirkeldiagram -->
+                <div class="glass-card p-6 rounded-xl flex flex-col items-center text-center animate-fadeIn">
+                    <h2 class="text-lg font-semibold mb-2">Projektstatus</h2>
+                    <svg class="circle-chart" viewBox="0 0 36 36">
+                        <circle class="circle-bg" cx="18" cy="18" r="16" fill="none" stroke-width="3"/>
+                        <circle class="circle" id="circle-projects" cx="18" cy="18" r="16" fill="none" stroke-width="3"
+                            stroke-linecap="round" stroke-dasharray="0,100"/>
+                    </svg>
+                    <div class="text-primary font-bold text-xl mt-2" id="circle-projects-label">0%</div>
+                </div>
+                <!-- Linjediagram -->
+                <div class="glass-card p-6 rounded-xl animate-fadeIn">
+                    <h2 class="text-lg font-semibold mb-2">Besökare (månad)</h2>
+                    <svg class="line-chart" viewBox="0 0 220 100" preserveAspectRatio="none" id="line-chart"></svg>
+                </div>
+                <!-- Stapeldiagram -->
+                <div class="glass-card p-6 rounded-xl animate-fadeIn">
+                    <h2 class="text-lg font-semibold mb-2">Meddelanden (vecka)</h2>
+                    <svg class="bar-chart" viewBox="0 0 210 100" preserveAspectRatio="none" id="bar-chart"></svg>
+                    <div class="flex justify-between text-xs text-gray-400 mt-2 px-2">
+                        <span>Mån</span><span>Tis</span><span>Ons</span><span>Tors</span><span>Fre</span><span>Lör</span><span>Sön</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Senaste kontaktförfrågningar -->
+            <div class="glass-card rounded-xl p-8 animate-fadeIn" id="messages-section">
+                <h2 class="text-xl font-semibold mb-4 flex items-center gap-4">
+                    Senaste kontaktförfrågningar
+                    <button id="show-archive-btn" class="ml-auto px-3 py-1 bg-dark-bg-3 text-xs rounded-lg text-gray-300 hover:bg-primary hover:text-white transition">Visa arkiv</button>
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-left">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 text-gray-400">Datum</th>
+                                <th class="py-2 px-4 text-gray-400">Namn</th>
+                                <th class="py-2 px-4 text-gray-400">E-post</th>
+                                <th class="py-2 px-4 text-gray-400">Ämne</th>
+                                <th class="py-2 px-4 text-gray-400">Meddelande</th>
+                                <th class="py-2 px-4 text-gray-400">Åtgärder</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contact-table-body">
+                            <!-- JS fyller i data -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Arkiverade meddelanden -->
+            <div class="glass-card rounded-xl p-8 animate-fadeIn hidden" id="archive-section">
+                <h2 class="text-xl font-semibold mb-4 flex items-center gap-4">
+                    Arkiverade meddelanden
+                    <button id="show-inbox-btn" class="ml-auto px-3 py-1 bg-dark-bg-3 text-xs rounded-lg text-gray-300 hover:bg-primary hover:text-white transition">Visa inkorg</button>
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-left">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 text-gray-400">Datum</th>
+                                <th class="py-2 px-4 text-gray-400">Namn</th>
+                                <th class="py-2 px-4 text-gray-400">E-post</th>
+                                <th class="py-2 px-4 text-gray-400">Ämne</th>
+                                <th class="py-2 px-4 text-gray-400">Meddelande</th>
+                                <th class="py-2 px-4 text-gray-400">Åtgärder</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archive-table-body">
+                            <!-- JS fyller i data -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Profilsektion -->
+            <div class="glass-card rounded-xl p-8 animate-fadeIn hidden" id="profile-section">
+                <h2 class="text-xl font-semibold mb-4">Profil</h2>
+                <div class="flex flex-col gap-4">
+                    <div><span class="font-semibold">Namn:</span> Ahmed Habib</div>
+                    <div><span class="font-semibold">E-post:</span> <span id="profile-email"></span></div>
+                    <div><span class="font-semibold">Roll:</span> Admin</div>
+                </div>
+            </div>
+            <!-- Inställningar -->
+            <div class="glass-card rounded-xl p-8 animate-fadeIn hidden" id="settings-section">
+                <h2 class="text-xl font-semibold mb-4">Inställningar</h2>
+                <div class="text-gray-400">Här kan du lägga till inställningar för adminpanelen.</div>
+            </div>
+        </main>
+    </div>
+    <script>
+    // --- Datahämtning från index.html (riktiga data) ---
+    function getProjects() {
+        // Hämta projekt från index.html (mock: räkna .project-card)
+        try {
+            // Om dashboard laddas från samma domän och index.html är tillgänglig via fetch
+            // Annars: lagra projekt i localStorage vid inloggning
+            return JSON.parse(localStorage.getItem('portfolio_projects')) || [];
+        } catch {
+            return [];
+        }
+    }
+    function getMessages() {
+        // Hämta kontaktmeddelanden från localStorage
+        return JSON.parse(localStorage.getItem('portfolio_messages')) || [];
+    }
+    function getVisits() {
+        // Hämta besökstid från localStorage
+        return parseInt(localStorage.getItem('portfolio_visits') || '0', 10);
+    }
+    function getUsers() {
+        // Hämta aktiva användare (mock: 1 om admin är inloggad)
+        return 1;
+    }
+    // --- Demo: Spara projekt och besökstid från index.html om det inte finns ---
+    if (!localStorage.getItem('portfolio_projects')) {
+        localStorage.setItem('portfolio_projects', JSON.stringify([
+            { title: "E-handelslösning", status: 80 },
+            { title: "Träningsapp", status: 60 },
+            { title: "Analysverktyg", status: 100 },
+            { title: "Projekthanteringssystem", status: 40 },
+            { title: "Finansapplikation", status: 90 },
+            { title: "AI Chatbot", status: 70 }
+        ]));
+    }
+    if (!localStorage.getItem('portfolio_visits')) {
+        localStorage.setItem('portfolio_visits', (Math.floor(Math.random()*500)+100).toString());
+    }
+    // --- Auth-skydd ---
+    if (localStorage.getItem('admin_logged_in') !== 'true') {
+        window.location.href = 'index.html';
+    }
+    // Statistik
+    const projects = getProjects();
+    const messages = getMessages();
+    const visits = getVisits();
+    const users = getUsers();
+    document.getElementById('stat-projects').textContent = projects.length;
+    document.getElementById('stat-messages').textContent = messages.length;
+    document.getElementById('stat-visits').textContent = visits + ' min';
+    document.getElementById('stat-users').textContent = users;
+    // Välkomsttext & profil
+    // const adminEmail = localStorage.getItem('admin_email') || 'Admin';
+    // document.getElementById('welcome-text').textContent = 'Välkommen, ' + adminEmail;
+    document.getElementById('welcome-text').textContent = 'Välkommen, Ahmed Habib';
+    document.getElementById('profile-email').textContent = 'Ahmadj.habib@gmail.com';
+    // Cirkeldiagram animation (visar genomsnittlig projektstatus)
+    function setCirclePercent(id, percent) {
+        const circle = document.getElementById(id);
+        const dash = Math.round(percent);
+        circle.setAttribute('stroke-dasharray', dash + ',100');
+    }
+    setTimeout(() => {
+        const avgStatus = projects.length ? projects.reduce((a, b) => a + b.status, 0) / projects.length : 0;
+        setCirclePercent('circle-projects', avgStatus);
+        document.getElementById('circle-projects-label').textContent = Math.round(avgStatus) + '%';
+    }, 300);
+    // Linjediagram (besökare per månad, mock: använd visits-data)
+    const lineData = Array.from({length: 12}, (_, i) => Math.round(visits/12 + Math.random()*10));
+    const lineChart = document.getElementById('line-chart');
+    let points = '';
+    lineData.forEach((val, i) => {
+        const x = 20 + i*18;
+        const y = 100 - val * 0.9;
+        points += (i === 0 ? 'M' : 'L') + x + ',' + y + ' ';
+    });
+    lineChart.innerHTML = `
+        <polyline fill="none" stroke="#6366f1" stroke-width="3" points="${points.trim()}" />
+        <circle cx="${20 + (lineData.length-1)*18}" cy="${100 - lineData[lineData.length-1]*0.9}" r="4" fill="#6366f1"/>
+    `;
+    // Stapeldiagram (meddelanden per dag, riktig data)
+    const weekDays = ['Mån','Tis','Ons','Tors','Fre','Lör','Sön'];
+    const weekData = Array(7).fill(0);
+    messages.forEach(msg => {
+        const d = new Date(msg.date || msg.createdAt || Date.now());
+        weekData[d.getDay() === 0 ? 6 : d.getDay()-1] += 1;
+    });
+    const barChart = document.getElementById('bar-chart');
+    barChart.innerHTML = '';
+    weekData.forEach((val, i) => {
+        const barHeight = val * 15;
+        barChart.innerHTML += `<rect class="bar" x="${i*30+10}" y="${100-barHeight}" width="20" height="${barHeight}" rx="6" fill="#6366f1" opacity="0.85"></rect>`;
+    });
+    // Kontaktmeddelanden
+    const tbody = document.getElementById('contact-table-body');
+    tbody.innerHTML = '';
+    messages.slice(-10).reverse().forEach(msg => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="py-2 px-4 text-gray-300">${msg.date || ''}</td>
+            <td class="py-2 px-4 text-gray-300">${msg.name || ''}</td>
+            <td class="py-2 px-4 text-gray-300">${msg.email || ''}</td>
+            <td class="py-2 px-4 text-gray-300">${msg.subject || ''}</td>
+            <td class="py-2 px-4 text-gray-300">${msg.message || ''}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+    // Navigering mellan sektioner
+    function showSection(section) {
+        document.getElementById('dashboard-charts').style.display = section === 'overview' ? '' : 'none';
+        document.getElementById('messages-section').style.display = section === 'overview' || section === 'messages' ? '' : 'none';
+        document.getElementById('archive-section').style.display = section === 'archive' ? '' : 'none';
+        document.getElementById('profile-section').style.display = section === 'profile' ? '' : 'none';
+        document.getElementById('settings-section').style.display = section === 'settings' ? '' : 'none';
+    }
+    document.getElementById('nav-overview').onclick = function() {
+        showSection('overview');
+        setActive(this);
+    };
+    document.getElementById('nav-statistics').onclick = function() {
+        showSection('overview');
+        setActive(this);
+    };
+    document.getElementById('nav-messages').onclick = function() {
+        showSection('messages');
+        setActive(this);
+        document.getElementById('archive-section').classList.add('hidden');
+        document.getElementById('messages-section').classList.remove('hidden');
+    };
+    document.getElementById('nav-profile').onclick = function() {
+        showSection('profile');
+        setActive(this);
+    };
+    document.getElementById('nav-settings').onclick = function() {
+        showSection('settings');
+        setActive(this);
+    };
+    function setActive(el) {
+        document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+        el.classList.add('active');
+    }
+    // Logga ut
+    document.getElementById('logout-btn').addEventListener('click', function() {
+        localStorage.removeItem('admin_logged_in');
+        localStorage.removeItem('admin_email');
+        window.location.href = 'index.html';
+    });
+    // Hantera kontaktmeddelanden och arkiv
+    function renderMessages() {
+        const messages = getMessages();
+        const tbody = document.getElementById('contact-table-body');
+        tbody.innerHTML = '';
+        if (messages.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="py-4 px-4 text-gray-400 text-center">Inga meddelanden</td></tr>`;
+        }
+        messages.slice(-20).reverse().forEach((msg, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="py-2 px-4 text-gray-300">${msg.date || ''}</td>
+                <td class="py-2 px-4 text-gray-300">${msg.name || ''}</td>
+                <td class="py-2 px-4 text-gray-300">${msg.email || ''}</td>
+                <td class="py-2 px-4 text-gray-300">${msg.subject || ''}</td>
+                <td class="py-2 px-4 text-gray-300">${msg.message || ''}</td>
+                <td class="py-2 px-4 flex gap-2">
+                    <button class="px-2 py-1 bg-red-600/80 text-xs rounded text-white hover:bg-red-700 transition" data-action="delete" data-idx="${messages.length-1-idx}">Ta bort</button>
+                    <button class="px-2 py-1 bg-primary/80 text-xs rounded text-white hover:bg-primary transition" data-action="reply" data-email="${encodeURIComponent(msg.email || '')}" data-subject="${encodeURIComponent(msg.subject || '')}">Svara</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+    function renderArchive() {
+        const archive = JSON.parse(localStorage.getItem('portfolio_messages_archive') || '[]');
+        const tbody = document.getElementById('archive-table-body');
+        tbody.innerHTML = '';
+        if (archive.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="py-4 px-4 text-gray-400 text-center">Inga arkiverade meddelanden</td></tr>`;
+        }
+        archive.slice(-20).reverse().forEach((msg, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="py-2 px-4 text-gray-300">${msg.date || ''}</td>
+                <td class="py-2 px-4 text-gray-300">${msg.name || ''}</td>
+                <td class="py-2 px-4 text-gray-300">${msg.email || ''}</td>
+                <td class="py-2 px-4 text-gray-300">${msg.subject || ''}</td>
+                <td class="py-2 px-4 text-gray-300">${msg.message || ''}</td>
+                <td class="py-2 px-4 flex gap-2">
+                    <button class="px-2 py-1 bg-primary/80 text-xs rounded text-white hover:bg-primary transition" data-action="restore" data-idx="${archive.length-1-idx}">Återställ</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+    function saveMessages(messages) {
+        localStorage.setItem('portfolio_messages', JSON.stringify(messages));
+    }
+    function saveArchive(archive) {
+        localStorage.setItem('portfolio_messages_archive', JSON.stringify(archive));
+    }
+    // Event delegation för åtgärder
+    document.getElementById('contact-table-body').onclick = function(e) {
+        if (e.target.dataset.action === 'delete') {
+            const idx = parseInt(e.target.dataset.idx, 10);
+            let messages = getMessages();
+            let archive = JSON.parse(localStorage.getItem('portfolio_messages_archive') || '[]');
+            const [removed] = messages.splice(idx, 1);
+            if (removed) archive.push(removed);
+            saveMessages(messages);
+            saveArchive(archive);
+            renderMessages();
+        }
+        if (e.target.dataset.action === 'reply') {
+            const email = decodeURIComponent(e.target.dataset.email || '');
+            const subject = decodeURIComponent(e.target.dataset.subject || '');
+            // Försök öppna Gmail-appen, annars öppna mailto
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent('Svar: ' + subject)}`;
+            window.open(gmailUrl, '_blank');
+        }
+    };
+    document.getElementById('archive-table-body').onclick = function(e) {
+        if (e.target.dataset.action === 'restore') {
+            const idx = parseInt(e.target.dataset.idx, 10);
+            let archive = JSON.parse(localStorage.getItem('portfolio_messages_archive') || '[]');
+            let messages = getMessages();
+            const [restored] = archive.splice(idx, 1);
+            if (restored) messages.push(restored);
+            saveMessages(messages);
+            saveArchive(archive);
+            renderArchive();
+        }
+    };
+    // Visa/visa arkiv
+    document.getElementById('show-archive-btn').onclick = function() {
+        document.getElementById('messages-section').classList.add('hidden');
+        document.getElementById('archive-section').classList.remove('hidden');
+    };
+    document.getElementById('show-inbox-btn').onclick = function() {
+        document.getElementById('archive-section').classList.add('hidden');
+        document.getElementById('messages-section').classList.remove('hidden');
+    };
+    // Navigering mellan sektioner (lägg till arkiv)
+    function showSection(section) {
+        document.getElementById('dashboard-charts').style.display = section === 'overview' ? '' : 'none';
+        document.getElementById('messages-section').style.display = (section === 'overview' || section === 'messages') ? '' : 'none';
+        document.getElementById('archive-section').style.display = section === 'archive' ? '' : 'none';
+        document.getElementById('profile-section').style.display = section === 'profile' ? '' : 'none';
+        document.getElementById('settings-section').style.display = section === 'settings' ? '' : 'none';
+    }
+    document.getElementById('nav-messages').onclick = function() {
+        showSection('messages');
+        setActive(this);
+        document.getElementById('archive-section').classList.add('hidden');
+        document.getElementById('messages-section').classList.remove('hidden');
+    };
+    // Init
+    renderMessages();
+    renderArchive();
+    </script>
+</body>
+</html>
