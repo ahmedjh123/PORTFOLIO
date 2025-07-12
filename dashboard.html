@@ -8,6 +8,8 @@
     <script>tailwind.config={theme:{extend:{colors:{primary:'#6366f1',secondary:'#4338ca'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link rel="icon" type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><rect width='8' height='8' rx='1.5' fill='%230a0a0a'/><text x='2' y='6' font-size='4.5' font-family='Montserrat,Arial,sans-serif' font-weight='bold' fill='white'>A</text><text x='6' y='6' font-size='4.5' font-family='Montserrat,Arial,sans-serif' font-weight='bold' fill='%236366f1'>H</text></svg>">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -122,13 +124,136 @@
             to { opacity: 1; transform: translateY(0);}
         }
         @media (max-width: 900px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0 !important; }
+            .sidebar {
+                position: fixed;
+                left: -220px;
+                top: 0;
+                transition: left 0.3s;
+                z-index: 100;
+                box-shadow: 2px 0 8px #232e4a33;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0 !important;
+            }
+            .mobile-sidebar-btn {
+                display: flex !important;
+            }
+        }
+        .mobile-sidebar-btn {
+            display: none;
+            position: fixed;
+            left: 16px;
+            top: 16px;
+            z-index: 101;
+            background: #232e4a;
+            color: #fff;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 22px;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #232e4a33;
+        }
+        .sidebar-close-btn {
+            display: none;
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            background: #232e4a;
+            color: #fff;
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        @media (max-width: 900px) {
+            .sidebar-close-btn {
+                display: block;
+            }
+        }
+        /* Mobilvänlig grid/flex */
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 0 !important;
+            }
+            .stat-box {
+                min-width: 120px;
+                min-height: 60px;
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+            .glass-card {
+                padding: 12px !important;
+            }
+            h1, h2 {
+                font-size: 1.2rem !important;
+            }
+        }
+        /* Gör input text svart i modal */
+        #add-project-modal input,
+        #add-project-modal textarea,
+        #add-project-modal select {
+            color: #222 !important;
+            background: #f3f4f6 !important;
+        }
+        #add-project-modal input::placeholder,
+        #add-project-modal textarea::placeholder {
+            color: #666 !important;
+        }
+        /* Projektlist-layout */
+        #project-stats-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .project-card-admin {
+            background: rgba(31,41,55,0.15);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px;
+            box-shadow: 0 2px 8px 0 #232e4a33;
+            padding: 18px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            flex-wrap: wrap;
+            transition: box-shadow 0.2s;
+        }
+        .project-card-admin:hover {
+            box-shadow: 0 8px 24px -8px #6366f1aa;
+            border: 1px solid #6366f133;
+        }
+        .project-info {
+            flex: 1 1 200px;
+            min-width: 180px;
+        }
+        .project-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+            min-width: 110px;
+        }
+        @media (max-width: 700px) {
+            .project-card-admin {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .project-actions {
+                flex-direction: row;
+                gap: 10px;
+                justify-content: flex-start;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="sidebar flex flex-col py-8 px-2">
+    <button class="mobile-sidebar-btn" id="mobile-sidebar-btn"><i class="ri-menu-line"></i></button>
+    <div class="sidebar flex flex-col py-8 px-2" id="sidebar">
+        <button class="sidebar-close-btn" id="sidebar-close-btn"><i class="ri-close-line"></i></button>
         <div class="text-2xl font-bold text-primary mb-10 px-4">Analytics</div>
         <a href="#" class="sidebar-link active" id="nav-overview"><i class="ri-dashboard-line"></i>Översikt</a>
         <a href="#" class="sidebar-link" id="nav-statistics"><i class="ri-bar-chart-2-line"></i>Statistik</a>
@@ -142,6 +267,10 @@
         <nav class="w-full glass-effect px-6 py-4 flex justify-between items-center">
             <div class="text-xl font-bold font-['Montserrat'] text-white">
                 <span class="text-primary">Ahmed</span> Admin
+            </div>
+            <div class="flex gap-2">
+                <button id="add-project-btn" class="px-3 py-1 bg-primary text-white rounded-lg text-xs hover:bg-secondary transition">Lägg till projekt</button>
+                <button id="export-data-btn" class="px-3 py-1 bg-dark-bg-3 text-xs rounded-lg text-gray-300 hover:bg-primary hover:text-white transition">Exportera data</button>
             </div>
         </nav>
         <main class="px-6 py-8">
@@ -190,6 +319,11 @@
                         <span>Mån</span><span>Tis</span><span>Ons</span><span>Tors</span><span>Fre</span><span>Lör</span><span>Sön</span>
                     </div>
                 </div>
+            </div>
+            <!-- Ny sektion: Statistik per projekt -->
+            <div class="glass-card rounded-xl p-8 animate-fadeIn mb-8" id="project-stats-section">
+                <h2 class="text-xl font-semibold mb-4">Projekt</h2>
+                <div id="project-stats-list"></div>
             </div>
             <!-- Senaste kontaktförfrågningar -->
             <div class="glass-card rounded-xl p-8 animate-fadeIn" id="messages-section">
@@ -254,6 +388,36 @@
                 <div class="text-gray-400">Här kan du lägga till inställningar för adminpanelen.</div>
             </div>
         </main>
+    </div>
+    <!-- Modal för att lägga till/redigera projekt -->
+    <div id="add-project-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden">
+        <div class="bg-dark-bg-2 glass-card rounded-xl p-8 w-full max-w-sm relative animate-fadeIn">
+            <button id="close-add-project-modal" class="absolute top-3 right-3 text-gray-400 hover:text-primary text-xl">&times;</button>
+            <h2 class="text-xl font-bold mb-4 text-center" id="add-project-modal-title">Lägg till projekt</h2>
+            <form id="add-project-form">
+                <div class="mb-4">
+                    <label class="block text-sm mb-1 text-gray-300" for="project-title">Titel</label>
+                    <input id="project-title" type="text" class="form-input w-full px-4 py-2 rounded-lg border-none" placeholder="Projektnamn" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm mb-1 text-gray-300" for="project-status">Status (%)</label>
+                    <input id="project-status" type="number" min="0" max="100" class="form-input w-full px-4 py-2 rounded-lg border-none" placeholder="Status" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm mb-1 text-gray-300" for="project-priority">Prioritet</label>
+                    <select id="project-priority" class="form-input w-full px-4 py-2 rounded-lg border-none" required>
+                        <option value="Låg">Låg</option>
+                        <option value="Medel">Medel</option>
+                        <option value="Hög">Hög</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm mb-1 text-gray-300" for="project-desc">Beskrivning</label>
+                    <textarea id="project-desc" class="form-input w-full px-4 py-2 rounded-lg border-none" placeholder="Beskrivning"></textarea>
+                </div>
+                <button type="submit" class="w-full py-2 bg-primary hover:bg-secondary text-white font-medium rounded-button transition-all">Spara</button>
+            </form>
+        </div>
     </div>
     <script>
     // --- Datahämtning från index.html (riktiga data) ---
@@ -509,9 +673,115 @@
         document.getElementById('archive-section').classList.add('hidden');
         document.getElementById('messages-section').classList.remove('hidden');
     };
+    // Mobilmeny: öppna/stäng sidopanel
+    const sidebar = document.getElementById('sidebar');
+    const mobileSidebarBtn = document.getElementById('mobile-sidebar-btn');
+    const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+    function openSidebar() {
+        sidebar.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    mobileSidebarBtn.onclick = openSidebar;
+    sidebarCloseBtn.onclick = closeSidebar;
+    // Stäng sidebar vid klick utanför på mobil
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 900 && sidebar.classList.contains('open')) {
+            if (!sidebar.contains(e.target) && e.target !== mobileSidebarBtn) {
+                closeSidebar();
+            }
+        }
+    });
+    // Lägg till/redigera projekt-modal
+    let editProjectIndex = null;
+    const addProjectBtn = document.getElementById('add-project-btn');
+    const addProjectModal = document.getElementById('add-project-modal');
+    const closeAddProjectModal = document.getElementById('close-add-project-modal');
+    const addProjectModalTitle = document.getElementById('add-project-modal-title');
+    addProjectBtn.onclick = () => {
+        editProjectIndex = null;
+        addProjectModalTitle.textContent = "Lägg till projekt";
+        document.getElementById('add-project-form').reset();
+        addProjectModal.classList.remove('hidden');
+    };
+    closeAddProjectModal.onclick = () => { addProjectModal.classList.add('hidden'); };
+    addProjectModal.onclick = (e) => { if (e.target === addProjectModal) addProjectModal.classList.add('hidden'); };
+    document.getElementById('add-project-form').onsubmit = function(e) {
+        e.preventDefault();
+        const title = document.getElementById('project-title').value.trim();
+        const status = parseInt(document.getElementById('project-status').value, 10);
+        const priority = document.getElementById('project-priority').value;
+        const desc = document.getElementById('project-desc').value.trim();
+        let projects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
+        if (editProjectIndex !== null) {
+            projects[editProjectIndex] = { title, status, priority, desc };
+        } else {
+            projects.push({ title, status, priority, desc });
+        }
+        localStorage.setItem('portfolio_projects', JSON.stringify(projects));
+        addProjectModal.classList.add('hidden');
+        renderProjectStats();
+        location.reload();
+    };
+    // Statistik per projekt med redigera/ta bort
+    function renderProjectStats() {
+        const projects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
+        const container = document.getElementById('project-stats-list');
+        container.innerHTML = '';
+        if (projects.length === 0) {
+            container.innerHTML = '<div class="text-gray-400">Inga projekt tillgängliga.</div>';
+            return;
+        }
+        projects.forEach((proj, idx) => {
+            container.innerHTML += `
+                <div class="project-card-admin">
+                    <div class="project-info">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="font-bold text-primary text-lg">${proj.title}</span>
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${proj.priority === 'Hög' ? 'bg-red-600 text-white' : proj.priority === 'Medel' ? 'bg-yellow-500 text-white' : 'bg-gray-600 text-white'}">${proj.priority || 'Medel'}</span>
+                        </div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs text-gray-400">Status:</span>
+                            <div class="w-24 bg-gray-700 rounded-full h-3 overflow-hidden">
+                                <div style="width:${proj.status || 0}%;" class="bg-primary h-3 rounded-full"></div>
+                            </div>
+                            <span class="text-xs text-primary font-bold ml-2">${proj.status || 0}%</span>
+                        </div>
+                        <div class="text-xs text-gray-400 mb-2">${proj.desc || ''}</div>
+                    </div>
+                    <div class="project-actions">
+                        <button class="px-3 py-1 bg-primary/80 text-xs rounded text-white hover:bg-primary transition" onclick="editProject(${idx})">Redigera</button>
+                        <button class="px-3 py-1 bg-red-600/80 text-xs rounded text-white hover:bg-red-700 transition" onclick="deleteProject(${idx})">Ta bort</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    window.editProject = function(idx) {
+        const projects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
+        const proj = projects[idx];
+        editProjectIndex = idx;
+        addProjectModalTitle.textContent = "Redigera projekt";
+        document.getElementById('project-title').value = proj.title || '';
+        document.getElementById('project-status').value = proj.status || '';
+        document.getElementById('project-priority').value = proj.priority || 'Medel';
+        document.getElementById('project-desc').value = proj.desc || '';
+        addProjectModal.classList.remove('hidden');
+    };
+    window.deleteProject = function(idx) {
+        let projects = JSON.parse(localStorage.getItem('portfolio_projects')) || [];
+        projects.splice(idx, 1);
+        localStorage.setItem('portfolio_projects', JSON.stringify(projects));
+        renderProjectStats();
+        location.reload();
+    };
     // Init
     renderMessages();
     renderArchive();
+    renderProjectStats();
     </script>
 </body>
 </html>
