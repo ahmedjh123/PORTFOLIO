@@ -778,10 +778,48 @@
         renderProjectStats();
         location.reload();
     };
-    // Init
-    renderMessages();
-    renderArchive();
+    // Fix: Always use the same localStorage for both desktop and mobile
+    // Some browsers (especially on iOS/Safari/private mode) may use different storage for desktop/mobile or block localStorage.
+    // To debug, show a warning if localStorage is not available or data is missing.
+
+    function isLocalStorageAvailable() {
+        try {
+            const testKey = '__test__';
+            localStorage.setItem(testKey, '1');
+            localStorage.removeItem(testKey);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    if (!isLocalStorageAvailable()) {
+        alert('Varning: Din webbläsare har begränsad eller ingen localStorage. Dashboard-data kan inte sparas eller visas korrekt.');
+    }
+
+    // Förklaring: localStorage är alltid lokal för varje webbläsare och enhet.
+    // Det synkas inte automatiskt mellan desktop och mobil.
+    // Om du vill att data ska vara samma på alla enheter måste du använda en server eller molntjänst (t.ex. Firebase, Supabase, etc).
+    // Nedan visas en varning om detta så att du vet varför datan skiljer sig.
+
+    function showSyncWarning() {
+        const main = document.querySelector('main');
+        if (main && !document.getElementById('sync-warning')) {
+            const div = document.createElement('div');
+            div.id = 'sync-warning';
+            div.className = 'mb-4 p-4 bg-red-500/20 text-red-900 rounded-lg text-center font-semibold';
+            div.innerText = 'OBS! Data i dashboarden sparas endast lokalt på denna enhet/webbläsare. För att synka mellan mobil och desktop krävs en server eller molntjänst.';
+            main.insertBefore(div, main.firstChild);
+        }
+    }
+
+    // Kör denna vid init
+    showSyncWarning();
+
+    // Kör denna efter renderProjectStats och renderMessages
     renderProjectStats();
+    renderMessages();
+    showDataWarningIfNeeded();
     </script>
 </body>
 </html>
