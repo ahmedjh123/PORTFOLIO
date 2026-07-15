@@ -8,6 +8,11 @@ type Status = "idle" | "loading" | "success" | "error";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// GitHub Pages only serves static files, so the form posts to Formspree
+// instead of a Next.js API route. Replace with your own form ID from
+// https://formspree.io before deploying — see README.md.
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID";
+
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -38,21 +43,18 @@ export default function Contact() {
     setErrorMessage("");
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          subject,
-          message,
-          company: data.get("company") ?? "",
-        }),
+        headers: { Accept: "application/json" },
+        body: data,
       });
 
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body?.error || "Något gick fel. Försök igen.");
+        const message =
+          body?.errors?.map((e: { message: string }) => e.message).join(" ") ||
+          "Något gick fel. Försök igen.";
+        throw new Error(message);
       }
 
       setStatus("success");
@@ -122,14 +124,19 @@ export default function Contact() {
                 noValidate
                 className="space-y-5"
               >
-                {/* Honeypot field — hidden from real visitors, catches simple bots */}
+                {/* Formspree's built-in honeypot field — hidden from real visitors */}
                 <input
                   type="text"
-                  name="company"
+                  name="_gotcha"
                   tabIndex={-1}
                   autoComplete="off"
                   className="hidden"
                   aria-hidden="true"
+                />
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="Nytt meddelande från portföljen"
                 />
 
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">

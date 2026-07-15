@@ -2,6 +2,11 @@
 
 Next.js 14 (App Router) + TypeScript + Tailwind + Framer Motion.
 
+Byggd som ett **statiskt export** (`output: "export"` i
+[next.config.mjs](next.config.mjs)) för att kunna hostas på GitHub Pages på
+domänen `ahmedjh.great-site.net`. Det innebär att sidan inte har någon
+Node-server eller API-routes — allt är HTML/CSS/JS som serveras direkt.
+
 ## Kom igång lokalt
 
 ```bash
@@ -11,48 +16,44 @@ npm run dev
 
 Öppna [http://localhost:3000](http://localhost:3000).
 
+För att se exakt vad som publiceras (det statiska bygget):
+
+```bash
+npm run build   # bygger till out/
+npm run start   # serverar out/ lokalt på http://localhost:3000
+```
+
 ## Innan deploy — det här måste fyllas i
 
-1. **Projektbeskrivningar** ([components/Projects.tsx](components/Projects.tsx))
-   Nexus Sportmatch och Procura har just nu tomma, streckade platshållare
-   för Problem / Lösning / Tech stack (markerade med `{/* TODO */}` i
-   koden). Fyll i riktig text där.
+1. **Kontaktformulär (Formspree)**
+   Eftersom GitHub Pages inte kan köra server-kod går kontaktformuläret via
+   [Formspree](https://formspree.io) istället för en egen backend:
 
-2. **SMTP-uppgifter för kontaktformuläret**
-   Kopiera `.env.example` till `.env.local` och fyll i:
+   1. Skapa ett gratis konto på formspree.io och ett nytt formulär.
+   2. Kopiera formulärets ID (ser ut som `https://formspree.io/f/xxxxxxxx`).
+   3. Klistra in det i [components/Contact.tsx](components/Contact.tsx),
+      i konstanten `FORMSPREE_ENDPOINT` högst upp i filen.
 
-   ```
-   ZOHO_SMTP_HOST=smtp.zoho.com
-   ZOHO_SMTP_PORT=465
-   ZOHO_SMTP_USER=ahmad@omegasoftware.se
-   ZOHO_SMTP_PASSWORD=<ditt Zoho-lösenord eller app-specifika lösenord>
-   CONTACT_RECEIVER_EMAIL=ahmad@omegasoftware.se
-   ```
+   Formuläret använder Formsprees inbyggda honeypot-fält (`_gotcha`) mot
+   enkla spam-bottar samt `_subject` för att sätta ämnesraden på mejlen som
+   kommer in. Det här har inte kunnat testas end-to-end här eftersom det
+   inte finns ett riktigt Formspree-formulär kopplat i den här miljön.
 
-   Skriv **aldrig** in riktiga lösenord i koden eller committa `.env.local`
-   — den är redan listad i `.gitignore`. På Vercel läggs samma variabler in
-   under Project Settings → Environment Variables.
-
-   Kontaktformuläret (`app/api/contact/route.ts`) har inte kunnat testas
-   end-to-end här eftersom det inte finns några riktiga SMTP-uppgifter i
-   den här miljön. Validering, honeypot och felhantering är på plats, men
-   det faktiska mejlutskicket bör testas manuellt en gång med riktiga
-   uppgifter innan launch.
-
-3. **Domän/deploy**
-   Repot innehåller fortfarande `CNAME` och `.htaccess` från den gamla
-   GitHub Pages-baserade sajten. De används inte av Next.js/Vercel — ta
-   bort dem eller låt dem ligga orört beroende på om domänen
-   `ahmedjh.great-site.net` ska pekas om mot Vercel.
+2. **GitHub Pages-inställning**
+   Deploy sker via [.github/workflows/deploy.yml](.github/workflows/deploy.yml),
+   som bygger sajten och publicerar den vid varje push till `main`. För att
+   det ska fungera måste repots **Settings → Pages → Source** vara satt till
+   **"GitHub Actions"** (inte "Deploy from a branch").
 
 ## Struktur
 
-- `app/` — App Router: `layout.tsx`, `page.tsx`, `globals.css`, samt
-  `api/contact/route.ts` för kontaktformuläret
+- `app/` — App Router: `layout.tsx`, `page.tsx`, `globals.css`
 - `components/` — en komponent per sektion (`Hero`, `About`, `Skills`,
   `Projects`, `Contact`, plus `Nav`, `Footer` och delade hjälpkomponenter)
-- `public/` — statiska filer, inklusive de befintliga
-  sökmotorverifieringsfilerna (Bing, Google)
+- `public/` — statiska filer: `CNAME` (custom domain), `.nojekyll`
+  (förhindrar GitHub Pages från att Jekyll-processa sajten), bilder och
+  sökmotorverifieringsfiler
+- `.github/workflows/deploy.yml` — bygger och publicerar till GitHub Pages
 
 ## Övrigt
 
@@ -62,3 +63,5 @@ npm run dev
   kommentaren i [components/Hero.tsx](components/Hero.tsx).
 - Designtokens (färger, typsnitt, typskala) ligger i
   [tailwind.config.ts](tailwind.config.ts), inte Tailwinds standardtema.
+- `next/image` körs i `unoptimized`-läge eftersom statisk export inte har
+  någon server att optimera bilder på.
