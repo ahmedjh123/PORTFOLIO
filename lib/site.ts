@@ -22,4 +22,4 @@ export const PERSON = {
 export const SITE_TITLE = `${PERSON.name} – Systemutvecklare i ${PERSON.city}`;
 
 export const SITE_DESCRIPTION =
-  "Ahmed Habib är systemutvecklare i Malmö som bygger moderna webb- och mobilappar med React, Next.js, TypeScript och Supabase. CEO och Lead Developer på Nexus Sportmatch, medgrundare och CTO på Procura.";
+  "Ahmed Habib är systemutvecklare i Malmö som bygger moderna webb- och mobilappar med React, Next.js, TypeScript och Supabase. VD och huvudutvecklare på Nexus Sportmatch, medgrundare och CTO på Procura.";

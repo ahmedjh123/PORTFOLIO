@@ -1,5 +1,4 @@
-import FadeInSection from "./FadeInSection";
-import SectionLabel from "./SectionLabel";
+import SectionHeading from "./SectionHeading";
 import { ClaudeLogo, OpenAILogo, TechIcon, type TechIconName } from "./icons";
 
 const TECHNOLOGIES: { name: string; icon: TechIconName }[] = [
@@ -51,9 +50,9 @@ export default function Skills() {
   return (
     <section id="fardigheter" className="bg-paper py-section">
       <div className="container-content">
-        <SectionLabel index="02" title="Färdigheter" />
+        <SectionHeading title="Färdigheter" />
 
-        <FadeInSection>
+        <div>
           <h3 className="label mb-4 text-faint">Teknologier</h3>
           <ul className="grid grid-cols-3 gap-px overflow-hidden border border-line bg-line sm:grid-cols-4 md:grid-cols-6">
             {TECHNOLOGIES.map((tech) => (
@@ -71,9 +70,9 @@ export default function Skills() {
               </li>
             ))}
           </ul>
-        </FadeInSection>
+        </div>
 
-        <FadeInSection delay={0.08} className="mt-10">
+        <div className="mt-10">
           <h3 className="label mb-4 text-faint">Kompetensområden</h3>
           <ul className="flex flex-wrap gap-2">
             {COMPETENCIES.map((item) => (
@@ -85,20 +84,15 @@ export default function Skills() {
               </li>
             ))}
           </ul>
-        </FadeInSection>
+        </div>
 
-        <FadeInSection delay={0.16} className="mt-10">
+        <div className="mt-10">
           <div className="flex flex-col gap-5 border border-graphite bg-graphite p-6 sm:flex-row sm:items-center sm:justify-between md:p-8">
             <div className="max-w-xl">
-              <h3 className="label mb-2 text-blue">AI-assisterad utveckling</h3>
+              <h3 className="label mb-2 text-blue">AI i utvecklingen</h3>
               <p className="text-base text-paper">
-                AI-assisterad utveckling (Claude Code, Codex) — men grunderna
-                sitter utan AI också.
-              </p>
-              <p className="mt-1.5 text-sm text-muted-onDark">
-                Jag behärskar grunderna på djupet och väljer AI-verktyg som
-                ett sätt att gå snabbare från idé till produktion, inte som
-                en genväg runt förståelse.
+                Jag använder Claude Code och Codex varje dag. De gör mig
+                snabbare, men jag läser och förstår all kod innan den går ut.
               </p>
             </div>
             <div className="flex items-center gap-6">
@@ -106,7 +100,7 @@ export default function Skills() {
               <OpenAILogo className="h-7 w-7 text-paper" />
             </div>
           </div>
-        </FadeInSection>
+        </div>
       </div>
     </section>
   );

@@ -1,14 +1,10 @@
-import FadeInSection from "./FadeInSection";
-import SectionLabel from "./SectionLabel";
+import SectionHeading from "./SectionHeading";
 
 type TechGroup = { label: string; value: string };
 
 type Project = {
-  index: string;
   name: string;
-  org?: string;
   role: string;
-  featured?: boolean;
   theme: "blue" | "graphite";
   problem: string;
   solutionIntro: string;
@@ -19,25 +15,22 @@ type Project = {
 
 const PROJECTS: Project[] = [
   {
-    index: "01",
     name: "Nexus Sportmatch",
-    role: "CEO & Lead Developer",
-    featured: true,
+    role: "VD och huvudutvecklare",
     theme: "blue",
     problem:
-      "Människor som vill träna har idag ingen modern plattform för att hitta träningspartners, spontana matcher eller lokala sportaktiviteter. Allt sker via manuella chattar, Messenger-grupper, SMS eller slumpmässiga Facebook-inlägg, vilket leder till missade möjligheter, otydlig kommunikation och ingen överblick över sportaktiviteter i området.",
+      "Den som vill träna med andra får i dag leta i Messenger-grupper, sms-trådar och Facebook-inlägg. Det är svårt att se vad som händer i närheten, och många matcher blir aldrig av för att det saknas en eller två spelare.",
     solutionIntro:
-      "Jag har designat och utvecklat hela Sportmatch-plattformen från grunden. Plattformen gör det enkelt för vanliga människor att:",
+      "Jag har designat och byggt hela Sportmatch själv, både appen och backend. I appen kan man:",
     solutionPoints: [
       "Hitta träningspartners baserat på nivå och sport",
       "Skapa och gå med i matcher, grupper och aktiviteter",
       "Bygga en sportprofil med ranking och statistik",
       "Få notiser i realtid när nya matcher skapas",
-      "Kommunicera snabbt och smidigt i appen",
-      "Använda ett modernt, snabbt och mobiloptimerat gränssnitt",
+      "Chatta med andra spelare direkt i appen",
     ],
     outcome:
-      "Sportmatch är byggt för att bli Sveriges mest moderna sportmatchningsplattform för alla som vill träna mer och hitta nya människor.",
+      "Målet är att det ska gå lika snabbt att hitta någon att träna med som att skicka ett sms.",
     stack: [
       { label: "Frontend", value: "React Native (Expo), Next.js" },
       { label: "Backend", value: "Supabase (PostgreSQL, Auth, Storage)" },
@@ -50,14 +43,13 @@ const PROJECTS: Project[] = [
     ],
   },
   {
-    index: "02",
     name: "Procura",
-    role: "Co-founder & CTO",
+    role: "Medgrundare och CTO",
     theme: "graphite",
     problem:
-      "Små och medelstora leverantörer lägger enorma mängder tid på offentliga upphandlingar som de aldrig kan vinna. För att avgöra om ett anbud ens är möjligt måste någon läsa 50 till 100 sidor manuellt, bara för att upptäcka ett diskvalificerande skallkrav långt in i dokumentet. Det saknas ett verktyg som automatiskt läser kraven, matchar dem mot företagets kapabilitet och ger ett binärt kvalificeringsbesked.",
+      "Små och medelstora leverantörer lägger mycket tid på upphandlingar de aldrig hade kunnat vinna. För att veta om ett anbud ens är möjligt måste någon läsa 50 till 100 sidor, och ofta dyker ett skallkrav som stoppar allt upp först långt in i dokumentet.",
     solutionIntro:
-      "Jag utvecklade kärnarkitekturen för Procura, en plattform som automatiserar kvalificeringsbeslutet i offentlig upphandling. Plattformen gör detta:",
+      "Jag har byggt kärnarkitekturen i Procura, som läser upphandlingen åt företaget och svarar på om de kan lämna anbud. Procura:",
     solutionPoints: [
       "Hämtar och strukturerar förfrågningsunderlag från svenska och europeiska annonsdatabaser",
       "Extraherar skallkrav, certifikatkrav, ekonomiska trösklar och referenskrav",
@@ -67,7 +59,7 @@ const PROJECTS: Project[] = [
       "Levererar en kvalificeringskarta över alla pågående upphandlingar i företagets region",
     ],
     outcome:
-      "Resultatet är att företag slipper lägga tid på fel anbud och istället fokuserar på de upphandlingar de faktiskt kan vinna.",
+      "Företagen kan lägga sin tid på de anbud de faktiskt har en chans att vinna.",
     stack: [
       { label: "Frontend", value: "React, Next.js, Tailwind" },
       { label: "Backend", value: "Cloudflare Workers, Node.js" },
@@ -98,22 +90,10 @@ function ProjectCard({ project }: { project: Project }) {
           : "border-line bg-paper text-ink"
       }`}
     >
-      <div className="flex items-center gap-3">
-        <span className="label text-blue">{project.index}</span>
-        {project.featured && (
-          <span className="label border border-blue/40 px-2 py-0.5 text-blue">
-            Flaggskepp
-          </span>
-        )}
-      </div>
-
-      <h3 className="mt-2 font-display text-2xl font-medium tracking-tight">
+      <h3 className="font-display text-2xl font-semibold tracking-tight">
         {project.name}
       </h3>
-      <p className={`mt-1 text-sm ${faint}`}>
-        {project.org ? `${project.org} — ` : ""}
-        {project.role}
-      </p>
+      <p className={`mt-1 text-sm ${faint}`}>{project.role}</p>
 
       <div className="mt-6 border-l-2 border-blue/50 pl-4">
         <h4 className="label mb-1.5 text-blue">Problem</h4>
@@ -139,7 +119,7 @@ function ProjectCard({ project }: { project: Project }) {
       </div>
 
       <div className="mt-5 border-l-2 border-blue/50 pl-4">
-        <h4 className="label mb-2 text-blue">Tech stack</h4>
+        <h4 className="label mb-2 text-blue">Teknik</h4>
         <dl className="space-y-1">
           {project.stack.map((group) => (
             <div key={group.label} className={`flex gap-3 border-b ${rowBorder} py-1.5 text-sm`}>
@@ -157,13 +137,13 @@ export default function Projects() {
   return (
     <section id="projekt" className="bg-scandi py-section">
       <div className="container-content">
-        <SectionLabel index="03" title="Projekt" />
+        <SectionHeading title="Projekt" />
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
           {PROJECTS.map((project, i) => (
-            <FadeInSection key={project.name} delay={i * 0.08} className="h-full">
+            <div key={project.name} className="h-full">
               <ProjectCard project={project} />
-            </FadeInSection>
+            </div>
           ))}
         </div>
       </div>

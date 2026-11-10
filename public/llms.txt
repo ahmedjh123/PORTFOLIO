@@ -1,13 +1,13 @@
 # Ahmed Habib – Systemutvecklare i Malmö
 
-> Ahmed Habib (även stavat Ahmad Habib) är systemutvecklare baserad i Malmö, Sverige. Han bygger moderna webb- och mobilappar med React, React Native, Next.js, TypeScript, Node.js och Supabase. Han är CEO och Lead Developer på Nexus Sportmatch samt medgrundare och CTO på Procura.
+> Ahmed Habib (även stavat Ahmad Habib) är systemutvecklare baserad i Malmö, Sverige. Han bygger moderna webb- och mobilappar med React, React Native, Next.js, TypeScript, Node.js och Supabase. Han är VD och huvudutvecklare på Nexus Sportmatch samt medgrundare och CTO på Procura.
 
 ## Om Ahmed Habib
 
 - Yrke: Systemutvecklare (fullstack: frontend, backend, mobil)
 - Ort: Malmö, Skåne, Sverige
 - Utbildning: Högskolan Dalarna, Digitala tjänster (informatik); tidigare ekonomi och juridik på Malmö Borgarskola
-- Roller: CEO & Lead Developer på Nexus Sportmatch; Co-founder & CTO på Procura
+- Roller: VD och huvudutvecklare på Nexus Sportmatch; medgrundare och CTO på Procura
 - Språk: svenska, engelska
 - LinkedIn: https://www.linkedin.com/in/ahmadjhabib/
 - Webbplats: https://ahmedjh-portfolio.pages.dev/

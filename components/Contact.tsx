@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import FadeInSection from "./FadeInSection";
-import SectionLabel from "./SectionLabel";
+import SectionHeading from "./SectionHeading";
 import { PERSON } from "@/lib/site";
 
 type Status = "idle" | "loading" | "success" | "error";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// GitHub Pages only serves static files, so the form posts to Formspree
-// instead of a Next.js API route. Replace with your own form ID from
-// https://formspree.io before deploying — see README.md.
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID";
+// The site is a static export, so the form posts to Web3Forms, which emails
+// each submission to the address the access key was created for. The key is
+// meant to be public (it can only send to that one inbox).
+const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+const WEB3FORMS_ACCESS_KEY = "71ef544b-092b-4e01-8c46-facd3d4230eb";
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -40,22 +40,34 @@ export default function Contact() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    if (!WEB3FORMS_ACCESS_KEY) {
+      setStatus("error");
+      setErrorMessage(
+        `Formuläret är inte aktiverat än. Mejla mig på ${PERSON.email} så länge.`
+      );
+      return;
+    }
+
     setStatus("loading");
     setErrorMessage("");
 
+    data.set("access_key", WEB3FORMS_ACCESS_KEY);
+    data.set("subject", `Portföljen: ${subject}`);
+    data.set("from_name", name);
+    data.set("replyto", email);
+
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: data,
       });
 
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        const message =
-          body?.errors?.map((e: { message: string }) => e.message).join(" ") ||
-          "Något gick fel. Försök igen.";
-        throw new Error(message);
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok || !body?.success) {
+        throw new Error(
+          `Det gick inte att skicka just nu. Försök igen eller mejla ${PERSON.email}.`
+        );
       }
 
       setStatus("success");
@@ -72,16 +84,15 @@ export default function Contact() {
     return (
       <section id="kontakt" className="bg-graphite py-section">
         <div className="container-content">
-          <SectionLabel index="04" title="Kontakt" onDark />
-          <FadeInSection>
+          <SectionHeading title="Kontakt" onDark />
+          <div>
             <div className="max-w-lg border border-line-onDark bg-graphite-soft p-8">
               <p className="label mb-3 text-blue">Skickat</p>
               <h3 className="font-display text-2xl font-medium text-paper">
                 Tack för ditt meddelande.
               </h3>
               <p className="mt-3 text-muted-onDark">
-                Jag återkommer så snart jag kan, vanligtvis inom ett par
-                dagar.
+                Jag återkommer oftast inom ett par dagar.
               </p>
               <button
                 type="button"
@@ -91,7 +102,7 @@ export default function Contact() {
                 Skicka ett till meddelande
               </button>
             </div>
-          </FadeInSection>
+          </div>
         </div>
       </section>
     );
@@ -100,14 +111,14 @@ export default function Contact() {
   return (
     <section id="kontakt" className="bg-graphite py-section">
       <div className="container-content">
-        <SectionLabel index="04" title="Kontakt" onDark />
+        <SectionHeading title="Kontakt" onDark />
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
           <div className="md:col-span-4">
-            <FadeInSection>
+            <div>
               <p className="text-base text-muted-onDark">
-                Har du ett projekt, en idé eller bara en fråga? Skriv gärna —
-                jag läser allt som kommer in.
+                Hör av dig om du vill bygga något ihop eller bara har en
+                fråga. Jag svarar oftast inom ett par dagar.
               </p>
               <a
                 href={`mailto:${PERSON.email}`}
@@ -123,29 +134,24 @@ export default function Contact() {
               >
                 LinkedIn
               </a>
-            </FadeInSection>
+            </div>
           </div>
 
           <div className="md:col-span-7 md:col-start-6">
-            <FadeInSection delay={0.1}>
+            <div>
               <form
                 onSubmit={handleSubmit}
                 noValidate
                 className="space-y-5"
               >
-                {/* Formspree's built-in honeypot field — hidden from real visitors */}
+                {/* Web3Forms honeypot: bots tick it, real visitors never see it */}
                 <input
-                  type="text"
-                  name="_gotcha"
+                  type="checkbox"
+                  name="botcheck"
                   tabIndex={-1}
                   autoComplete="off"
                   className="hidden"
                   aria-hidden="true"
-                />
-                <input
-                  type="hidden"
-                  name="_subject"
-                  value="Nytt meddelande från portföljen"
                 />
 
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -202,7 +208,7 @@ export default function Contact() {
                   {status === "loading" ? "Skickar…" : "Skicka meddelande"}
                 </button>
               </form>
-            </FadeInSection>
+            </div>
           </div>
         </div>
       </div>

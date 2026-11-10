@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Manrope, Space_Mono } from "next/font/google";
+import { Source_Serif_4, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import {
   PERSON,
@@ -8,24 +8,17 @@ import {
   SITE_URL,
 } from "@/lib/site";
 
-const display = Space_Grotesk({
+const display = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "600"],
   variable: "--font-display",
   display: "swap",
 });
 
-const body = Manrope({
+const body = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-body",
-  display: "swap",
-});
-
-const mono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-mono",
   display: "swap",
 });
 
@@ -190,7 +183,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="sv" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html lang="sv" className={`${display.variable} ${body.variable}`}>
       <body className="bg-paper text-ink font-body antialiased selection:bg-blue selection:text-paper">
         <script
           type="application/ld+json"

@@ -29,7 +29,7 @@ export default function Nav() {
       <nav className="container-content flex items-center justify-between py-5">
         <a
           href="#hem"
-          className="font-display text-lg font-medium tracking-tight text-ink"
+          className="text-lg font-semibold tracking-tight text-ink"
         >
           AH<span className="text-blue">.</span>
         </a>
