@@ -51,16 +51,27 @@ export default function Contact() {
     setStatus("loading");
     setErrorMessage("");
 
-    data.set("access_key", WEB3FORMS_ACCESS_KEY);
-    data.set("subject", `Portföljen: ${subject}`);
-    data.set("from_name", name);
-    data.set("replyto", email);
+    // Web3Forms renders every non-reserved field as a labelled row in the
+    // notification email, in insertion order, so the keys double as the
+    // Swedish labels you see in the inbox. "Svara" goes straight to the
+    // visitor thanks to replyto.
+    const payload = new FormData();
+    payload.set("access_key", WEB3FORMS_ACCESS_KEY);
+    payload.set("subject", `Nytt meddelande från ${name}: ${subject}`);
+    payload.set("from_name", `Portföljen · ${name}`);
+    payload.set("replyto", email);
+    if (data.get("botcheck")) payload.set("botcheck", "on");
+    payload.set("Namn", name);
+    payload.set("E-post", email);
+    payload.set("Ämne", subject);
+    payload.set("Meddelande", message);
+    payload.set("Skickat från", window.location.href.split("#")[0]);
 
     try {
       const res = await fetch(WEB3FORMS_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
-        body: data,
+        body: payload,
       });
 
       const body = await res.json().catch(() => ({}));
