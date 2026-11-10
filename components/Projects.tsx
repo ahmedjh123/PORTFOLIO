@@ -52,7 +52,6 @@ const PROJECTS: Project[] = [
   {
     index: "02",
     name: "Procura",
-    org: "Quality Systems AB",
     role: "Co-founder & CTO",
     theme: "graphite",
     problem:

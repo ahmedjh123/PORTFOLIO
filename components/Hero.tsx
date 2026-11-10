@@ -45,7 +45,7 @@ export default function Hero() {
               transition={{ duration: 0.7, ease: EASE }}
               className="label mb-6 text-muted"
             >
-              Ahmed Habib — Portfölj / 2026
+              Systemutvecklare i Malmö — Portfölj / 2026
             </motion.p>
 
             <motion.h1
@@ -63,7 +63,7 @@ export default function Hero() {
               transition={{ duration: 0.8, ease: EASE, delay: 0.4 }}
               className="mt-4 max-w-2xl font-display text-2xl font-medium tracking-tight text-muted md:text-3xl"
             >
-              Systemutvecklare &amp; digitala tjänster-specialist
+              Systemutvecklare &amp; specialist på digitala tjänster
             </motion.h2>
 
             <motion.p
@@ -72,7 +72,7 @@ export default function Hero() {
               transition={{ duration: 0.8, ease: EASE, delay: 0.65 }}
               className="mt-8 max-w-md text-lg text-muted md:ml-[8%]"
             >
-              Jag bygger digitala tjänster med fokus på kvalitet,
+              Jag bygger webb- och mobilappar med fokus på kvalitet,
               tillgänglighet och modern teknik.
             </motion.p>
           </div>

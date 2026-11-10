@@ -4,6 +4,10 @@ import SectionLabel from "./SectionLabel";
 
 const META = [
   {
+    label: "Yrke",
+    value: "Systemutvecklare, baserad i Malmö",
+  },
+  {
     label: "Utbildning",
     value: "Högskolan Dalarna, Digitala tjänster (informatik)",
   },
@@ -29,7 +33,7 @@ export default function About() {
               <div className="relative mb-6 aspect-[4/5] w-full max-w-[260px] overflow-hidden border border-line">
                 <Image
                   src="/ahmed.jpg"
-                  alt="Ahmed Habib"
+                  alt="Ahmed Habib, systemutvecklare i Malmö"
                   fill
                   sizes="(min-width: 768px) 260px, 60vw"
                   className="object-cover object-top"
@@ -49,6 +53,11 @@ export default function About() {
           <div className="md:col-span-7 md:col-start-6">
             <FadeInSection delay={0.1}>
               <div className="space-y-4 text-base leading-relaxed text-muted">
+                <p>
+                  Jag heter Ahmed Habib och är systemutvecklare i Malmö. Jag
+                  bygger moderna webb- och mobilappar från idé till färdig
+                  produkt, med React, Next.js, TypeScript och Supabase.
+                </p>
                 <p>
                   Jag är utbildad på Högskolan Dalarnas program i digitala
                   tjänster, med inriktning informatik. Innan dess läste jag

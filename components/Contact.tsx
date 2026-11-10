@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import FadeInSection from "./FadeInSection";
 import SectionLabel from "./SectionLabel";
+import { PERSON } from "@/lib/site";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -109,10 +110,18 @@ export default function Contact() {
                 jag läser allt som kommer in.
               </p>
               <a
-                href="mailto:ahmad@omegasoftware.se"
+                href={`mailto:${PERSON.email}`}
                 className="label mt-6 inline-block text-paper underline decoration-line-onDark underline-offset-4 hover:decoration-blue"
               >
-                ahmad@omegasoftware.se
+                {PERSON.email}
+              </a>
+              <a
+                href={PERSON.linkedin}
+                target="_blank"
+                rel="me noopener noreferrer"
+                className="label mt-3 block text-paper underline decoration-line-onDark underline-offset-4 hover:decoration-blue"
+              >
+                LinkedIn
               </a>
             </FadeInSection>
           </div>
